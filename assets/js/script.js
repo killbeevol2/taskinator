@@ -49,9 +49,6 @@ var createTaskEl = function (taskDataObj) {
 
   createTaskEl();
 
-  console.log(taskDataObj);
-  console.log(taskDataObj.status);
-
   var taskInfoEl = document.createElement("div");
   taskInfoEl.className = "task-info";
   taskInfoEl.innerHTML =
@@ -82,18 +79,21 @@ var createTaskActions = function (taskId) {
   editButtonEl.className = "btn edit-btn";
   editButtonEl.setAttribute("data-task-id", taskId);
   actionContainerEl.appendChild(editButtonEl);
+
   // create delete button
   var deleteButtonEl = document.createElement("button");
   deleteButtonEl.textContent = "Delete";
   deleteButtonEl.className = "btn delete-btn";
   deleteButtonEl.setAttribute("data-task-id", taskId);
   actionContainerEl.appendChild(deleteButtonEl);
+
   // create change status dropdown
   var statusSelectEl = document.createElement("select");
   statusSelectEl.setAttribute("name", "status-change");
   statusSelectEl.setAttribute("data-task-id", taskId);
   statusSelectEl.className = "select-status";
   actionContainerEl.appendChild(statusSelectEl);
+
   // create status options
   var statusChoices = ["To Do", "In Progress", "Completed"];
 
@@ -154,7 +154,6 @@ var taskButtonHandler = function (event) {
 };
 
 var taskStatusChangeHandler = function (event) {
-  console.log(event.target.value);
 
   // find task list item based on event.target's data-task-id attribute
   var taskId = event.target.getAttribute("data-task-id");
@@ -232,10 +231,35 @@ for (var i = 0; i < tasks.length; i++) {
   saveTasks();
 };
 
-var saveTasks = function(){
+var saveTasks = function() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
+};
 
-}
+var loadTasks = function() {
+  // Retrieve Tasks from localStorage
+  var savedTasks = localStorage.getItem("tasks");
+  //Test the Task Retrieval
+  if (!savedTasks) {
+    return false;
+  }
+  console.log("Saved tasks found!");
+  //Get the Tasks into an Object Array
+savedTasks = JSON.parse(savedTasks);
+for (var i = 0; i < savedTasks.length; i++) {
+  //Print Task Items to the Page
+  createTaskEl(savedTasks[i]);
+  }
+};
+
+//var createTaskEl = function (taskDataObj) {
+  // var listItemEl = document.createElement("li");
+  // listItemEl.className = "task-item";
+  // listItemEl.setAttribute("data-task-id", taskIdCounter);
+
+  // taskDataObj.id = taskIdCounter;
+  // tasks.push(taskDataObj);
+
+  // createTaskEl();
 
 // Create a new task
 formEl.addEventListener("submit", taskFormHandler);
